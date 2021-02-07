@@ -8,14 +8,23 @@ import com.chknight.tasklist.dtos.ToDoItemDTO;
 import com.chknight.tasklist.exceptions.ToDoItemNotFoundException;
 import com.chknight.tasklist.exceptions.ToDoItemValidationException;
 import com.chknight.tasklist.services.ToDoService;
+import com.chknight.tasklist.shared.ErrorDetailMessage;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/todo")
+@Tags(value = {@Tag(name = "todo")})
 public class TodoController {
 
     private final ToDoService toDoService;
@@ -31,9 +40,13 @@ public class TodoController {
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
 
-    public ResponseEntity<ToDoItemDTO> createToDoItem(
-            @RequestBody ToDoItemAddRequest request
+    public ResponseEntity<?> createToDoItem(
+            @Valid @RequestBody ToDoItemAddRequest request,
+            Errors errors
     ) throws ToDoItemValidationException {
+        if (errors.hasErrors()) {
+            return buildValidationError(errors);
+        }
         return ResponseEntity.ok(
                 toDoService.createToDoItem(request.getText())
         );
@@ -57,8 +70,12 @@ public class TodoController {
     )
     public ResponseEntity<?> updateToDoItemById(
             @PathVariable("id") Long id,
-            @RequestBody ToDoItemUpdateRequest request
+            @Valid @RequestBody ToDoItemUpdateRequest request,
+            Errors errors
     ) throws ToDoItemNotFoundException, ToDoItemValidationException {
+        if (errors.hasErrors()) {
+            return buildValidationError(errors);
+        }
         return ResponseEntity.ok(
                 toDoService.updateToDoItemById(id, request.getText(), request.getIsCompleted())
         );
@@ -82,6 +99,24 @@ public class TodoController {
                         new ToDoItemNotFoundError(
                                 "NotFoundError",
                                 exception.errors
+                        )
+                );
+    }
+
+    public ResponseEntity<?> buildValidationError(Errors errors) {
+        List<ErrorDetailMessage> validationErrors = errors.getFieldErrors().stream().map((error) -> ErrorDetailMessage.build(
+                "params",
+                error.getField(),
+                error.getDefaultMessage(),
+                error.getRejectedValue() == null ? "null" : error.getRejectedValue().toString()
+        )).collect(Collectors.toList());
+
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new ToDoItemValidationError(
+                                "ValidationError",
+                                validationErrors
                         )
                 );
     }
