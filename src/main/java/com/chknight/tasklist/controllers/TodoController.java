@@ -9,33 +9,40 @@ import com.chknight.tasklist.exceptions.ToDoItemValidationException;
 import com.chknight.tasklist.services.ToDoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/todo")
 public class TodoController {
 
-    private ToDoService toDoService;
+    private final ToDoService toDoService;
 
     @Autowired
     public TodoController(ToDoService toDoService) {
         this.toDoService = toDoService;
     }
 
-    @PostMapping("/")
+    @PostMapping(
+            value = "",
+            consumes = { MediaType.APPLICATION_JSON_VALUE },
+            produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+
     public ResponseEntity<ToDoItemDTO> createToDoItem(
             @RequestBody ToDoItemAddRequest request
-            ) throws ToDoItemValidationException {
+    ) throws ToDoItemValidationException {
         return ResponseEntity.ok(
                 toDoService.createToDoItem(request.getText())
         );
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<?> createToDoItem(
+    @GetMapping(
+            value = "/{id}",
+            produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+    public ResponseEntity<?> findToDoItemById(
             @PathVariable("id") Long id
     ) throws ToDoItemNotFoundException {
         return ResponseEntity.ok(
