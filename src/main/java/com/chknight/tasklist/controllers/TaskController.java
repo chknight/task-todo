@@ -4,6 +4,10 @@ import com.chknight.tasklist.controllers.response.BalanceTestResult;
 import com.chknight.tasklist.shared.ErrorDetailMessage;
 import com.chknight.tasklist.controllers.response.ToDoItemValidationError;
 import com.chknight.tasklist.services.BracketValidationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +36,22 @@ public class TaskController {
      * @return Result of validation
      */
     @GetMapping(path = "/validateBrackets")
+    @Operation(
+            summary = "Checks if brackets in a string are balanced",
+            tags = {"task"},
+            description = "Brackets in a string are considered to be balanced if the following criteria are met:\n" +
+                    "        - For every opening bracket (i.e., **`(`**, **`{`**, or **`[`**), there is a matching closing bracket (i.e., **`)`**, **`}`**, or **`]`**) of the same type (i.e., **`(`** matches **`)`**, **`{`** matches **`}`**, and **`[`** matches **`]`**). An opening bracket must appear before (to the left of) its matching closing bracket. For example, **`]{}[`** is not balanced.\n" +
+                    "        - No unmatched braces lie between some pair of matched bracket. For example, **`({[]})`** is balanced, but **`{[}]`** and **`[{)]`** are not balanced.",
+            responses = {
+                    @ApiResponse(content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = BalanceTestResult.class,
+                                    example = "{\n" +
+                                            "    \"input\": \"[{()}]\",\n" +
+                                            "    \"isBalanced\": true\n" +
+                                            "}"))),
+                    @ApiResponse(responseCode = "400", description = "Pet not found")
+            }
+    )
     public ResponseEntity<?> validateBrackets(
             @RequestParam(value = "input") String input
     ) {
