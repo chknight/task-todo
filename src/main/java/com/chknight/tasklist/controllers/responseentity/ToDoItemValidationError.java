@@ -1,16 +1,13 @@
 package com.chknight.tasklist.controllers.responseentity;
 
-import java.util.Map;
+import java.util.List;
 
 public class ToDoItemValidationError {
-    public Map<String, String> details;
     public String name;
+    public List<ErrorDetailMessage> details;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public ToDoItemValidationError(String name, List<ErrorDetailMessage> details) {
+        this.details = details;
         this.name = name;
     }
 }

@@ -54,4 +54,46 @@ public class TaskControllerTest {
                 jsonPath("$.input", is(testString))
         );
     }
+
+    @Test
+    public void shouldReturn400IfInputIsTooShort() throws Exception {
+        String testString = "";
+        mockMvc.perform(
+                get("/tasks/validateBrackets")
+                        .param("input", testString)
+        ).andExpect(
+                status().isBadRequest()
+        ).andExpect(
+                jsonPath("$.name", is("ValidationError"))
+        ).andExpect(
+                jsonPath("$.details[0].location", is("params"))
+        ).andExpect(
+                jsonPath("$.details[0].param", is("text"))
+        ).andExpect(
+                jsonPath("$.details[0].msg", is("Must be between 1 and 50 chars long"))
+        ).andExpect(
+                jsonPath("$.details[0].value", is(""))
+        );
+    }
+
+    @Test
+    public void shouldReturn400IfInputIsTooLong() throws Exception {
+        String testString = "a".repeat(51);
+        mockMvc.perform(
+                get("/tasks/validateBrackets")
+                        .param("input", testString)
+        ).andExpect(
+                status().isBadRequest()
+        ).andExpect(
+                jsonPath("$.name", is("ValidationError"))
+        ).andExpect(
+                jsonPath("$.details[0].location", is("params"))
+        ).andExpect(
+                jsonPath("$.details[0].param", is("text"))
+        ).andExpect(
+                jsonPath("$.details[0].msg", is("Must be between 1 and 50 chars long"))
+        ).andExpect(
+                jsonPath("$.details[0].value", is(""))
+        );
+    }
 }
