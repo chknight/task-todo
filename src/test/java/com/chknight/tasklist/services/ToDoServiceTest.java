@@ -113,4 +113,38 @@ public class ToDoServiceTest {
         Assertions.assertEquals(1, exception.errors.size());
         Assertions.assertEquals(GenericErrorMessage.build("Item with 1 not found"),exception.errors.get(0));
     }
+
+    @Test
+    public void shouldReturnDTOAfterUpdateData() throws Exception {
+        ToDoItemEntity entityToSave = new ToDoItemEntity();
+        String text = "test text";
+        Long id = 1L;
+        Boolean isCompleted = true;
+
+        when(repository.save(any(ToDoItemEntity.class))).thenReturn(entityToSave);
+        when(repository.findById(id)).thenReturn(Optional.of(entityToSave));
+
+        ToDoItemDTO result = toDoService.updateToDoItemById(id, text, isCompleted);
+        verify(repository, times(1)).save(argThat(
+                (toDoItemEntity -> toDoItemEntity.getText().equals(text)
+                        && toDoItemEntity.getIsCompleted() == isCompleted)
+        ));
+    }
+
+    @Test
+    public void shouldThrowNotFoundExceptionIfCouldNotFoundByIdWhenUpdatingToItem() {
+        ToDoItemEntity entityToSave = new ToDoItemEntity();
+        String text = "test text";
+        Long id = 1L;
+        Boolean isCompleted = true;
+
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        ToDoItemNotFoundException exception = Assertions.assertThrows(
+                ToDoItemNotFoundException.class,
+                () -> toDoService.updateToDoItemById(id, text, isCompleted)
+        );
+        Assertions.assertEquals(1, exception.errors.size());
+        Assertions.assertEquals(GenericErrorMessage.build("Item with 1 not found"),exception.errors.get(0));
+    }
 }
