@@ -12,3 +12,5 @@ Task use the validation bracket service, which use stack to validate the bracket
 Todo use the spring-data-jpa to handle CRUD operations. The data is stored in memory db h2
 
 To test the endpoint, please fidn to 188.166.209.200:8080
+
+Also, security is not enable in this project to make it quicker to be out of box
