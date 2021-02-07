@@ -1,9 +1,6 @@
 package com.chknight.tasklist.exceptions;
 
 import com.chknight.tasklist.shared.ErrorDetailMessage;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
 
 public class ToDoItemValidationException extends Exception {
