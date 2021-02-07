@@ -1,6 +1,7 @@
 package com.chknight.tasklist.controllers;
 
 import com.chknight.tasklist.controllers.request.ToDoItemAddRequest;
+import com.chknight.tasklist.controllers.request.ToDoItemUpdateRequest;
 import com.chknight.tasklist.controllers.response.ToDoItemNotFoundError;
 import com.chknight.tasklist.controllers.response.ToDoItemValidationError;
 import com.chknight.tasklist.dtos.ToDoItemDTO;
@@ -46,7 +47,20 @@ public class TodoController {
             @PathVariable("id") Long id
     ) throws ToDoItemNotFoundException {
         return ResponseEntity.ok(
-                toDoService.getToDoItemById(id)
+                toDoService.findToDoItem(id)
+        );
+    }
+
+    @PatchMapping(
+            value = "/{id}",
+            produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+    public ResponseEntity<?> updateToDoItemById(
+            @PathVariable("id") Long id,
+            @RequestBody ToDoItemUpdateRequest request
+    ) throws ToDoItemNotFoundException, ToDoItemValidationException {
+        return ResponseEntity.ok(
+                toDoService.updateToDoItemById(id, request.getText(), request.getIsCompleted())
         );
     }
 

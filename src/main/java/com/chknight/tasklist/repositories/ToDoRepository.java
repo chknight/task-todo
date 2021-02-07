@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Repository to handle CRUD operation of the todo item
+ * Repository to handle CRUD operation of the to-do item
  * Please notice that, the data is only stored in memory
  */
 @Repository
