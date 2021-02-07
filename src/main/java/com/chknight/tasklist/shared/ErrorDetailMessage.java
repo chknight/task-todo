@@ -1,4 +1,4 @@
-package com.chknight.tasklist.controllers.responseentity;
+package com.chknight.tasklist.shared;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +12,10 @@ public class ErrorDetailMessage {
     String param;
     String msg;
     String value;
+
+    static public ErrorDetailMessage build(String location, String param, String msg, String value) {
+        return new ErrorDetailMessage(location, param, msg, value);
+    }
 
     public ErrorDetailMessage(String location, String param, String msg, String value) {
         this.location = location;

@@ -1,8 +1,8 @@
 package com.chknight.tasklist.controllers;
 
-import com.chknight.tasklist.controllers.responseentity.BalanceTestResult;
-import com.chknight.tasklist.controllers.responseentity.ErrorDetailMessage;
-import com.chknight.tasklist.controllers.responseentity.ToDoItemValidationError;
+import com.chknight.tasklist.controllers.response.BalanceTestResult;
+import com.chknight.tasklist.shared.ErrorDetailMessage;
+import com.chknight.tasklist.controllers.response.ToDoItemValidationError;
 import com.chknight.tasklist.services.BracketValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

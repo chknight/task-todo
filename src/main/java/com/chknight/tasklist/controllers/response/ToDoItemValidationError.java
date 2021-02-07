@@ -1,4 +1,6 @@
-package com.chknight.tasklist.controllers.responseentity;
+package com.chknight.tasklist.controllers.response;
+
+import com.chknight.tasklist.shared.ErrorDetailMessage;
 
 import java.util.List;
 

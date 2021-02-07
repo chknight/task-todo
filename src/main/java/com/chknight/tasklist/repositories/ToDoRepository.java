@@ -1,6 +1,6 @@
 package com.chknight.tasklist.repositories;
 
-import com.chknight.tasklist.entities.ToDoItem;
+import com.chknight.tasklist.entities.ToDoItemEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.HashMap;
@@ -11,8 +11,8 @@ import java.util.Map;
  * Please notice that, the data is only stored in memory
  */
 @Repository
-public interface ToDoRepository extends CrudRepository<ToDoItem, Long> {
+public interface ToDoRepository extends CrudRepository<ToDoItemEntity, Long> {
 
-    Map<Long, ToDoItem> todoItems = new HashMap<>();
+    Map<Long, ToDoItemEntity> todoItems = new HashMap<>();
 
 }

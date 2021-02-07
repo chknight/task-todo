@@ -1,4 +1,4 @@
-package com.chknight.tasklist.controllers.responseentity;
+package com.chknight.tasklist.controllers.response;
 
 public class BalanceTestResult {
     public String input;
